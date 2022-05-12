@@ -56,22 +56,50 @@ class bot():
         self.browser.find_element(By.CSS_SELECTOR, 'button[type=submit]').click()
         sleep(5)
 
-    def dizu_tasks(self, conta):
+    def dizu_instagram_tasks(self, conta):
         self.browser.get('https://painel.dizu.com.br/painel/conectar')
         
         self.browser.implicitly_wait(10)
         self.browser.find_element(By.ID, 'instagram-tab').click()
 
+        #* Selecionando conta para fazer a tarefa
+
         self.browser.implicitly_wait(10)
         select = Select(self.browser.find_element(By.ID, 'instagram_id'))
-        print(conta + '(instagram)')
         select.select_by_visible_text(conta + '(Instagram)')
-        self.browser.find_element_by_id('iniciarTarefas').click()
+        # self.browser.find_element_by_id('iniciarTarefas').click()
 
+        #* Start task
+
+        self.browser.implicitly_wait(10)
+        self.browser.find_element(By.ID, 'iniciarTarefas').click()
+
+        #* Start instagram follow task
+
+        self.browser.implicitly_wait(10)
+        self.browser.find_element(By.ID, 'conectar_step_4').click()
+        sleep(5)
+
+        #* Change dizu_tab for instagram_tab
+
+        alltabs = self.browser.window_handles
+        self.browser.switch_to.window(alltabs[1])
+
+        self.browser.implicitly_wait(10)
+        self.browser.find_element(By.XPATH, "//*[contains(text(), 'Seguir')]").click()
+        sleep(3)
+
+        if ( bool(self.browser.find_element(By.XPATH, "//*[contains(text(), 'Enviar mensagem')]")) == True ):
+            print('Seguindo conta')
+        
+        self.browser.close()
+        self.browser.switch_to.window(alltabs[0])
+
+        self.browser.find_element(By.ID, 'conectar_step_5').click()
 
 
 for i in range(len(insta_user)):
     init = bot(dizu, pwd)
     init.insta_login(insta_user[i], insta_pwd[i])
     init.dizu_login()
-    init.dizu_tasks(insta_user[i])
+    init.dizu_instagram_tasks(insta_user[i])
