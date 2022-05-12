@@ -56,9 +56,21 @@ class bot():
         self.browser.find_element(By.CSS_SELECTOR, 'button[type=submit]').click()
         sleep(5)
 
+    def dizu_tasks(self, conta):
+        self.browser.get('https://painel.dizu.com.br/painel/conectar')
+        
+        self.browser.implicitly_wait(10)
+        self.browser.find_element(By.ID, 'instagram-tab').click()
+
+        self.browser.implicitly_wait(10)
+        select = Select(self.browser.find_element(By.ID, 'instagram_id'))
+        select.select_by_visible_text(conta + '(Instagram)')
+        self.browser.find_element_by_id('iniciarTarefas').click()
+
 
 
 for i in range(len(insta_user)):
     init = bot(dizu, pwd)
     init.insta_login(insta_user[i], insta_pwd[i])
     init.dizu_login()
+    init.dizu_tasks(insta_user[i])
