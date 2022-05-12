@@ -64,6 +64,7 @@ class bot():
 
         self.browser.implicitly_wait(10)
         select = Select(self.browser.find_element(By.ID, 'instagram_id'))
+        print(conta + '(instagram)')
         select.select_by_visible_text(conta + '(Instagram)')
         self.browser.find_element_by_id('iniciarTarefas').click()
 
